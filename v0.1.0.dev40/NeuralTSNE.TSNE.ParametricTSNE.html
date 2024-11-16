@@ -1,0 +1,266 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuralTSNE.TSNE.ParametricTSNE package &mdash; NeuralTSNE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="_static/github_style.css?v=1093691d" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=8d563738"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="NeuralTSNE.Utils package" href="NeuralTSNE.Utils.html" />
+    <link rel="prev" title="NeuralTSNE.TSNE.NeuralNetwork package" href="NeuralTSNE.TSNE.NeuralNetwork.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            NeuralTSNE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">NeuralTSNE</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="NeuralTSNE.html">NeuralTSNE package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="NeuralTSNE.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="NeuralTSNE.DatasetLoader.html">NeuralTSNE.DatasetLoader package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeuralTSNE.MnistPlotter.html">NeuralTSNE.MnistPlotter package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeuralTSNE.Plotter.html">NeuralTSNE.Plotter package</a></li>
+<li class="toctree-l4 current"><a class="reference internal" href="NeuralTSNE.TSNE.html">NeuralTSNE.TSNE package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="NeuralTSNE.Utils.html">NeuralTSNE.Utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="NeuralTSNE.html#module-NeuralTSNE">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">NeuralTSNE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="modules.html">NeuralTSNE</a></li>
+          <li class="breadcrumb-item"><a href="NeuralTSNE.html">NeuralTSNE package</a></li>
+          <li class="breadcrumb-item"><a href="NeuralTSNE.TSNE.html">NeuralTSNE.TSNE package</a></li>
+      <li class="breadcrumb-item active">NeuralTSNE.TSNE.ParametricTSNE package</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/NeuralTSNE.TSNE.ParametricTSNE.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="neuraltsne-tsne-parametrictsne-package">
+<h1>NeuralTSNE.TSNE.ParametricTSNE package<a class="headerlink" href="#neuraltsne-tsne-parametrictsne-package" title="Link to this heading"></a></h1>
+<section id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Link to this heading"></a></h2>
+</section>
+<section id="module-NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne">
+<span id="neuraltsne-tsne-parametrictsne-parametric-tsne-module"></span><h2>NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne module<a class="headerlink" href="#module-NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne" title="Link to this heading"></a></h2>
+<dl class="py class">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">ParametricTSNE</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">perplexity</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">batch_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_exaggeration_epochs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">early_exaggeration_value</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">max_iterations</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_components</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">features</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">multipliers</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">List</span><span class="p"><span class="pre">[</span></span><span class="pre">float</span><span class="p"><span class="pre">]</span></span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_jobs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">0</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tolerance</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">1e-05</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">force_cpu</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">bool</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">model</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="NeuralTSNE.TSNE.NeuralNetwork.html#NeuralTSNE.TSNE.NeuralNetwork.neural_network.NeuralNetwork" title="NeuralTSNE.TSNE.NeuralNetwork.neural_network.NeuralNetwork"><span class="pre">NeuralNetwork</span></a><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">Module</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">OrderedDict</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE" title="Link to this definition"></a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Parametric t-SNE implementation using a neural network model.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>loss_fn</strong> (<cite>str</cite>) – Loss function for t-SNE. Currently supports <cite>kl_divergence</cite>.</p></li>
+<li><p><strong>perplexity</strong> (<cite>int</cite>) – Perplexity parameter for t-SNE.</p></li>
+<li><p><strong>batch_size</strong> (<cite>int</cite>) – Batch size for training.</p></li>
+<li><p><strong>early_exaggeration_epochs</strong> (<cite>int</cite>) – Number of epochs for early exaggeration.</p></li>
+<li><p><strong>early_exaggeration_value</strong> (<cite>float</cite>) – Early exaggeration factor.</p></li>
+<li><p><strong>max_iterations</strong> (<cite>int</cite>) – Maximum number of iterations for optimization.</p></li>
+<li><p><strong>n_components</strong> (<cite>int</cite>, optional) – Number of components in the output. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>features</strong> (<cite>int</cite>, optional) – Number of input features. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>multipliers</strong> (<cite>List[float]</cite>, optional) – List of multipliers for hidden layers in the neural network. Defaults to <cite>None</cite>.</p></li>
+<li><p><strong>n_jobs</strong> (<cite>int</cite>, optional) – Number of workers for data loading. Defaults to <cite>0</cite>.</p></li>
+<li><p><strong>tolerance</strong> (<cite>float</cite>, optional) – Tolerance level for convergence. Defaults to <cite>1e-5</cite>.</p></li>
+<li><p><strong>force_cpu</strong> (<cite>bool</cite>, optional) – Force using CPU even if GPU is available. Defaults to <cite>False</cite>.</p></li>
+<li><p><strong>model</strong> (<cite>Union[NeuralNetwork, nn.Module, OrderedDict]</cite>, optional) – Predefined model. Defaults to <cite>None</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.create_dataloaders">
+<span class="sig-name descname"><span class="pre">create_dataloaders</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">train</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dataset</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataLoader</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataLoader</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE.create_dataloaders"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.create_dataloaders" title="Link to this definition"></a></dt>
+<dd><p>Create dataloaders for training and testing sets.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>train</strong> (<cite>Dataset</cite>) – Training dataset.</p></li>
+<li><p><strong>test</strong> (<cite>Dataset</cite>) – Testing dataset.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple containing training and testing dataloaders.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Tuple[DataLoader | None, DataLoader | None]</cite></p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.read_model">
+<span class="sig-name descname"><span class="pre">read_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE.read_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.read_model" title="Link to this definition"></a></dt>
+<dd><p>Load the model’s state dictionary from a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<cite>str</cite>) – Name of the file to load the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.save_model">
+<span class="sig-name descname"><span class="pre">save_model</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE.save_model"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.save_model" title="Link to this definition"></a></dt>
+<dd><p>Save the model’s state dictionary to a file.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>filename</strong> (<cite>str</cite>) – Name of the file to save the model.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.set_loss_fn">
+<span class="sig-name descname"><span class="pre">set_loss_fn</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">loss_fn</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Callable</span></span></span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE.set_loss_fn"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.set_loss_fn" title="Link to this definition"></a></dt>
+<dd><p>Set the loss function based on the provided string.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>loss_fn</strong> (<cite>str</cite>) – String indicating the desired loss function.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Corresponding loss function.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Callable</cite></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Currently supports <cite>kl_divergence</cite> as the loss function.</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.split_dataset">
+<span class="sig-name descname"><span class="pre">split_dataset</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">X</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">y</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tensor</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">train_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">test_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Tuple</span><span class="p"><span class="pre">[</span></span><span class="pre">DataLoader</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">DataLoader</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">None</span><span class="p"><span class="pre">]</span></span></span></span><a class="reference internal" href="_modules/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.html#ParametricTSNE.split_dataset"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="reference external" href="https://github.com/Minosyx/WIP_NeuralTSNE/blob/v0.1.0.dev40/NeuralTSNE/NeuralTSNE/TSNE/ParametricTSNE/parametric_tsne.py"><span class="linkcode-link"><span class="pre">View</span> <span class="pre">on</span> <span class="pre">GitHub</span></span></a><a class="headerlink" href="#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.split_dataset" title="Link to this definition"></a></dt>
+<dd><p>Split the dataset into training and testing set</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>X</strong> (<cite>torch.Tensor</cite>) – Input data tensor.</p></li>
+<li><p><strong>y</strong> (<cite>torch.Tensor</cite>, optional) – Target tensor. Default is <cite>None</cite>.</p></li>
+<li><p><strong>train_size</strong> (<cite>float</cite>, optional) – Proportion of the dataset to include in the training set.</p></li>
+<li><p><strong>test_size</strong> (<cite>float</cite>, optional) – Proportion of the dataset to include in the testing set.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Tuple containing training and testing dataloaders.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p><cite>Tuple[DataLoader | None, DataLoader | None]</cite></p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Splits the input data into training and testing sets, and returns corresponding dataloaders.</p>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-NeuralTSNE.TSNE.ParametricTSNE">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-NeuralTSNE.TSNE.ParametricTSNE" title="Link to this heading"></a></h2>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="NeuralTSNE.TSNE.NeuralNetwork.html" class="btn btn-neutral float-left" title="NeuralTSNE.TSNE.NeuralNetwork package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="NeuralTSNE.Utils.html" class="btn btn-neutral float-right" title="NeuralTSNE.Utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Patryk Tajs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v0.1.0.dev40
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../v0.1.0.dev38/NeuralTSNE.TSNE.ParametricTSNE.html">v0.1.0.dev38</a></dd>
+            <dd><a href="../v0.1.0.dev39/NeuralTSNE.TSNE.ParametricTSNE.html">v0.1.0.dev39</a></dd>
+            <dd><a href="NeuralTSNE.TSNE.ParametricTSNE.html">v0.1.0.dev40</a></dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

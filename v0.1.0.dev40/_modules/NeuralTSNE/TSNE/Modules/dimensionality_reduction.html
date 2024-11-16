@@ -1,0 +1,436 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuralTSNE.TSNE.Modules.dimensionality_reduction &mdash; NeuralTSNE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/github_style.css?v=1093691d" />
+
+  
+      <script src="../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../index.html" class="icon icon-home">
+            NeuralTSNE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../modules.html">NeuralTSNE</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../index.html">NeuralTSNE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">NeuralTSNE.TSNE.Modules.dimensionality_reduction</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NeuralTSNE.TSNE.Modules.dimensionality_reduction</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Any</span><span class="p">,</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">,</span> <span class="nc">Union</span>
+
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+
+<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">L</span>
+
+<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE</span> <span class="kn">import</span> <span class="nc">ParametricTSNE</span>
+
+
+<div class="viewcode-block" id="DimensionalityReduction">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction">[docs]</a>
+<span class="k">class</span> <span class="nc">DimensionalityReduction</span><span class="p">(</span><span class="nc">L</span><span class="o">.</span><span class="nc">LightningModule</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Lightning Module for training a neural network-based</span>
+<span class="sd">    Parametric t-SNE dimensionality reduction model.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `tsne` : `ParametricTSNE`</span>
+<span class="sd">        Parametric t-SNE model for feature extraction.</span>
+<span class="sd">    `shuffle` : `bool`</span>
+<span class="sd">        Flag indicating whether to shuffle data during training.</span>
+<span class="sd">    `optimizer` : `str`, optional</span>
+<span class="sd">        Optimizer for training. Defaults to `adam`.</span>
+<span class="sd">    `lr` : `float`, optional</span>
+<span class="sd">        Learning rate for the optimizer. Defaults to `1e-3`.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    This class defines a Lightning Module for training a neural network-based</span>
+<span class="sd">    Parametric t-SNE dimensionality reduction model for feature extraction.</span>
+<span class="sd">    It includes methods for the training step, configuring optimizers, and</span>
+<span class="sd">    handling the training process.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">tsne</span><span class="p">:</span> <span class="s2">&quot;ParametricTSNE&quot;</span><span class="p">,</span>
+        <span class="n">shuffle</span><span class="p">:</span> <span class="bp">bool</span><span class="p">,</span>
+        <span class="n">optimizer</span><span class="p">:</span> <span class="bp">str</span> <span class="o">=</span> <span class="s2">&quot;adam&quot;</span><span class="p">,</span>
+        <span class="n">lr</span><span class="p">:</span> <span class="bp">float</span> <span class="o">=</span> <span class="mf">1e-3</span><span class="p">,</span>
+    <span class="p">):</span>
+        <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span> <span class="o">=</span> <span class="n">tsne</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">batch_size</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">model</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span><span class="o">.</span><span class="n">model</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">loss_fn</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">loss_fn</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_epochs</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">early_exaggeration_epochs</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_value</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">early_exaggeration_value</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span> <span class="o">=</span> <span class="n">shuffle</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">lr</span> <span class="o">=</span> <span class="n">lr</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span> <span class="o">=</span> <span class="n">optimizer</span>
+        <span class="bp">self</span><span class="o">.</span><span class="kp">reset_exaggeration_status</span><span class="p">()</span>
+
+<div class="viewcode-block" id="DimensionalityReduction.reset_exaggeration_status">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.reset_exaggeration_status">[docs]</a>
+    <span class="k">def</span> <span class="nf">reset_exaggeration_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Reset exaggeration status based on the number of exaggeration epochs.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">has_exaggeration_ended</span> <span class="o">=</span> <span class="kc">True</span> <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_epochs</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">else</span> <span class="kc">False</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.training_step">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.training_step">[docs]</a>
+    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="nc">Union</span><span class="p">[</span>
+            <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nc">List</span><span class="p">[</span><span class="nc">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Any</span><span class="p">]]</span>
+        <span class="p">],</span>
+        <span class="n">batch_idx</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a single training step.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        `batch` : `Union[torch.Tensor, Tuple[torch.Tensor, ...], List[Union[torch.Tensor, Any]]]`</span>
+<span class="sd">            Input batch.</span>
+<span class="sd">        `batch_idx` : `int`</span>
+<span class="sd">            Index of the current batch.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `Dict[str, torch.Tensor]`</span>
+<span class="sd">            Dictionary containing the `loss` value.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method defines a single training step for the dimensionality reduction model. It computes the loss using</span>
+<span class="sd">        the model&#39;s `logits` and the conditional probability matrix `_P_batch`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">_P_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="nc">P_current</span><span class="p">[</span>
+            <span class="n">batch_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="p">:</span> <span class="p">(</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
+        <span class="p">]</span>
+
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">shuffle</span><span class="p">:</span>
+            <span class="n">p_idxs</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="kp">randperm</span><span class="p">(</span><span class="n">x</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+            <span class="n">x</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="n">p_idxs</span><span class="p">]</span>
+            <span class="n">_P_batch</span> <span class="o">=</span> <span class="n">_P_batch</span><span class="p">[</span><span class="n">p_idxs</span><span class="p">,</span> <span class="p">:]</span>
+            <span class="n">_P_batch</span> <span class="o">=</span> <span class="n">_P_batch</span><span class="p">[:,</span> <span class="n">p_idxs</span><span class="p">]</span>
+
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="kp">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="kp">loss_fn</span><span class="p">(</span>
+            <span class="n">logits</span><span class="p">,</span>
+            <span class="n">_P_batch</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="kp">log</span><span class="p">(</span>
+            <span class="s2">&quot;train_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">}</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.validation_step">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.validation_step">[docs]</a>
+    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span>
+        <span class="n">batch</span><span class="p">:</span> <span class="nc">Union</span><span class="p">[</span>
+            <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nc">List</span><span class="p">[</span><span class="nc">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Any</span><span class="p">]]</span>
+        <span class="p">],</span>
+        <span class="n">batch_idx</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
+        <span class="n">dataloader_idx</span><span class="p">:</span> <span class="nc">Union</span><span class="p">[</span><span class="bp">int</span><span class="p">,</span> <span class="kc">None</span><span class="p">]</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+    <span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a single validation step.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        `batch` : `Union[torch.Tensor, Tuple[torch.Tensor, ...], List[Union[torch.Tensor, Any]]]`</span>
+<span class="sd">            Input batch.</span>
+<span class="sd">        `batch_idx`</span>
+<span class="sd">            Index of the current batch.</span>
+<span class="sd">        `dataloader_idx` : optional</span>
+<span class="sd">            Index of the dataloader</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `Dict[str, torch.Tensor]`</span>
+<span class="sd">            Dictionary containing the `loss` value.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method defines a single validation step for the dimensionality reduction model. It computes the loss using</span>
+<span class="sd">        the model&#39;s `logits` and the conditional probability matrix `_P_batch`.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">dataloader_idx</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">_P_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">val_P</span><span class="p">[</span><span class="n">dataloader_idx</span><span class="p">][</span>
+                <span class="n">batch_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="p">:</span> <span class="p">(</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
+            <span class="p">]</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">_P_batch</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">val_P</span><span class="p">[</span><span class="mi">0</span><span class="p">][</span>
+                <span class="n">batch_idx</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span> <span class="p">:</span> <span class="p">(</span><span class="n">batch_idx</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span>
+            <span class="p">]</span>
+        <span class="n">logits</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="kp">model</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+        <span class="n">loss</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="kp">loss_fn</span><span class="p">(</span>
+            <span class="n">logits</span><span class="p">,</span>
+            <span class="n">_P_batch</span><span class="p">,</span>
+            <span class="p">{</span><span class="s2">&quot;device&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span><span class="o">.</span><span class="n">device</span><span class="p">,</span> <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">batch_size</span><span class="p">},</span>
+        <span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="kp">log</span><span class="p">(</span>
+            <span class="s2">&quot;val_loss&quot;</span><span class="p">,</span> <span class="n">loss</span><span class="p">,</span> <span class="n">on_step</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">on_epoch</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">prog_bar</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">logger</span><span class="o">=</span><span class="kc">True</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">}</span></div>
+
+
+    <span class="k">def</span> <span class="nf">_set_optimizer</span><span class="p">(</span>
+        <span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">optimizer_params</span><span class="p">:</span> <span class="bp">dict</span>
+    <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="nc">Optimizer</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Set the optimizer based on the provided string.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        `optimizer` : `str`</span>
+<span class="sd">            String indicating the desired optimizer.</span>
+<span class="sd">        `optimizer_params` : `dict`</span>
+<span class="sd">            Dictionary containing optimizer parameters.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `torch.optim.Optimizer`</span>
+<span class="sd">            Initialized optimizer.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method initializes and returns the desired optimizer based on the provided string.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;adam&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">optim</span><span class="o">.</span><span class="nc">Adam</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="kp">parameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">optimizer_params</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;sgd&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">optim</span><span class="o">.</span><span class="nc">SGD</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="kp">parameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">optimizer_params</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="n">optimizer</span> <span class="o">==</span> <span class="s2">&quot;rmsprop&quot;</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">optim</span><span class="o">.</span><span class="nc">RMSprop</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">model</span><span class="o">.</span><span class="kp">parameters</span><span class="p">(),</span> <span class="o">**</span><span class="n">optimizer_params</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Unknown optimizer&quot;</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DimensionalityReduction.configure_optimizers">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.configure_optimizers">[docs]</a>
+    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="nc">Optimizer</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Configure the optimizer for training.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `torch.optim.Optimizer`</span>
+<span class="sd">            Configured optimizer.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method configures and returns the optimizer for training based on the specified parameters.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="kp">_set_optimizer</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">optimizer</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;lr&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">lr</span><span class="p">})</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.on_train_start">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_start">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_train_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform actions at the beginning of the training process.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method is called at the start of the training process and calculates the joint</span>
+<span class="sd">        probability matrix P based on the training dataloader.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="nc">P</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span><span class="o">.</span><span class="kp">_calculate_P</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">train_dataloader</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.on_train_epoch_start">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_epoch_start">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_train_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform actions at the start of each training epoch.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method is called at the start of each training epoch. If exaggeration is enabled and has</span>
+<span class="sd">        not ended, it modifies the joint probability matrix for the current epoch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_epoch</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_exaggeration_ended</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">if</span> <span class="p">(</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_epochs</span> <span class="o">&gt;</span> <span class="mi">0</span>
+            <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">current_epoch</span> <span class="o">&lt;</span> <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_epochs</span>
+        <span class="p">):</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;P_multiplied&quot;</span><span class="p">):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="nc">P_multiplied</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="nc">P</span><span class="o">.</span><span class="kp">clone</span><span class="p">()</span>
+                <span class="bp">self</span><span class="o">.</span><span class="nc">P_multiplied</span> <span class="o">*=</span> <span class="bp">self</span><span class="o">.</span><span class="n">exaggeration_value</span>
+            <span class="bp">self</span><span class="o">.</span><span class="nc">P_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="nc">P_multiplied</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="bp">self</span><span class="o">.</span><span class="nc">P_current</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="nc">P</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">has_exaggeration_ended</span> <span class="o">=</span> <span class="kc">True</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.on_train_epoch_end">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_epoch_end">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_train_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform actions at the end of each training epoch.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method is called at the end of each training epoch. If exaggeration has ended and</span>
+<span class="sd">        P_multiplied exists, it is deleted to free up memory.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;P_multiplied&quot;</span><span class="p">)</span> <span class="ow">and</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_exaggeration_ended</span><span class="p">:</span>
+            <span class="k">del</span> <span class="bp">self</span><span class="o">.</span><span class="nc">P_multiplied</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.on_validation_start">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_validation_start">[docs]</a>
+    <span class="k">def</span> <span class="nf">on_validation_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform actions at the beginning of the validation process.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method is called at the start of the validation process and calculates the joint</span>
+<span class="sd">        probability matrix P for each validation dataloader.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">hasattr</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="s2">&quot;val_P&quot;</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">val_P</span> <span class="o">=</span> <span class="p">[</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">tsne</span><span class="o">.</span><span class="kp">_calculate_P</span><span class="p">(</span><span class="n">loader</span><span class="p">)</span>
+                <span class="k">for</span> <span class="n">loader</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">trainer</span><span class="o">.</span><span class="n">val_dataloaders</span>
+            <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="DimensionalityReduction.predict_step">
+<a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.predict_step">[docs]</a>
+    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Perform a single step during the prediction process.</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">        `batch`</span>
+<span class="sd">            Input batch.</span>
+<span class="sd">        `batch_idx`</span>
+<span class="sd">            Index of the current batch.</span>
+<span class="sd">        `dataloader_idx` : optional</span>
+<span class="sd">            Index of the dataloader</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">        `torch.Tensor`</span>
+<span class="sd">            Model predictions.</span>
+
+<span class="sd">        Note</span>
+<span class="sd">        ----</span>
+<span class="sd">        This method is called during the prediction process and returns the model&#39;s predictions for the input batch.</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="kp">model</span><span class="p">(</span><span class="n">batch</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span></div>
+</div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Patryk Tajs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v0.1.0.dev40
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="../../../../../v0.1.0.dev38/index.html">v0.1.0.dev38</a></dd>
+            <dd><a href="../../../../../v0.1.0.dev39/index.html">v0.1.0.dev39</a></dd>
+            <dd><a href="dimensionality_reduction.html">v0.1.0.dev40</a></dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
