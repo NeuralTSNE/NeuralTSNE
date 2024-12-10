@@ -1,0 +1,274 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders &mdash; NeuralTSNE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/github_style.css?v=1093691d" />
+
+  
+      <script src="../../../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../../../index.html" class="icon icon-home">
+            NeuralTSNE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../../../modules.html">NeuralTSNE</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../../../index.html">NeuralTSNE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders</h1><div class="highlight"><pre>
+<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="nc">Dataset</span><span class="p">,</span> <span class="nc">Subset</span>
+
+<span class="kn">from</span> <span class="nn">NeuralTSNE.DatasetLoader</span> <span class="kn">import</span> <span class="n">get_datasets</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.StatWriters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">save_means_and_vars</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.LabelWriters</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">save_torch_labels</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Preprocessing</span> <span class="kn">import</span> <span class="n">prepare_data</span>
+
+
+<div class="viewcode-block" id="load_text_file">
+<a class="viewcode-back" href="../../../../../NeuralTSNE.Utils.Loaders.FileLoaders.html#NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders.load_text_file">[docs]</a>
+<span class="k">def</span> <span class="nf">load_text_file</span><span class="p">(</span>
+    <span class="n">input_file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span>
+    <span class="n">step</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
+    <span class="n">header</span><span class="p">:</span> <span class="bp">bool</span><span class="p">,</span>
+    <span class="n">exclude_cols</span><span class="p">:</span> <span class="nc">List</span><span class="p">[</span><span class="bp">int</span><span class="p">],</span>
+    <span class="n">variance_threshold</span><span class="p">:</span> <span class="bp">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load and preprocess data from a text file.</span>
+
+<span class="sd">    The function reads the data from the specified text file, skips the `header` if present,</span>
+<span class="sd">    and excludes specified columns if the `exclude_cols` list is provided. It then subsamples</span>
+<span class="sd">    the data based on the given `step` size. Finally, it preprocesses the data by applying</span>
+<span class="sd">    a `variance threshold` to perform feature selection and returns the resulting `torch.Tensor`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `input_file` : `str`</span>
+<span class="sd">        The path to the input text file.</span>
+<span class="sd">    `step` : `int`</span>
+<span class="sd">        Step size for subsampling the data.</span>
+<span class="sd">    `header` : `bool`</span>
+<span class="sd">        A boolean indicating whether the file has a header.</span>
+<span class="sd">    `exclude_cols` : `List[int]`</span>
+<span class="sd">        A list of column indices to exclude from the data.</span>
+<span class="sd">    `variance_threshold` : `float`</span>
+<span class="sd">        Threshold for variance-based feature selection.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `torch.Tensor`</span>
+<span class="sd">        Processed data tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">input_file</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span>
+    <span class="n">cols</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="k">if</span> <span class="n">header</span><span class="p">:</span>
+        <span class="n">input_file</span><span class="o">.</span><span class="kp">readline</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">exclude_cols</span><span class="p">:</span>
+        <span class="n">last_pos</span> <span class="o">=</span> <span class="n">input_file</span><span class="o">.</span><span class="kp">tell</span><span class="p">()</span>
+        <span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">input_file</span><span class="o">.</span><span class="kp">readline</span><span class="p">()</span><span class="o">.</span><span class="kp">strip</span><span class="p">()</span><span class="o">.</span><span class="kp">split</span><span class="p">())</span>
+        <span class="n">input_file</span><span class="o">.</span><span class="kp">seek</span><span class="p">(</span><span class="n">last_pos</span><span class="p">)</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">arange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">ncols</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="n">cols</span> <span class="o">=</span> <span class="nb">tuple</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="kp">delete</span><span class="p">(</span><span class="n">cols</span><span class="p">,</span> <span class="n">exclude_cols</span><span class="p">))</span>
+
+    <span class="nc">X</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">loadtxt</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">usecols</span><span class="o">=</span><span class="n">cols</span><span class="p">)</span>
+
+    <span class="n">input_file</span><span class="o">.</span><span class="kp">close</span><span class="p">()</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">array</span><span class="p">(</span><span class="nc">X</span><span class="p">[::</span><span class="n">step</span><span class="p">,</span> <span class="p">:])</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="kp">prepare_data</span><span class="p">(</span><span class="n">variance_threshold</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="load_npy_file">
+<a class="viewcode-back" href="../../../../../NeuralTSNE.Utils.Loaders.FileLoaders.html#NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders.load_npy_file">[docs]</a>
+<span class="k">def</span> <span class="nf">load_npy_file</span><span class="p">(</span>
+    <span class="n">input_file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span>
+    <span class="n">step</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
+    <span class="n">exclude_cols</span><span class="p">:</span> <span class="nc">List</span><span class="p">[</span><span class="bp">int</span><span class="p">],</span>
+    <span class="n">variance_threshold</span><span class="p">:</span> <span class="bp">float</span><span class="p">,</span>
+<span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load and preprocess data from a `NumPy` (`.npy`) file.</span>
+
+<span class="sd">    The function loads data from the specified `NumPy` file, subsamples it based on the given `step` size,</span>
+<span class="sd">    and excludes specified columns if the `exclude_cols` list is provided. It then preprocesses the data</span>
+<span class="sd">    by applying a `variance threshold` to perform feature selection and returns the resulting `torch.Tensor`.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `input_file` : `str`</span>
+<span class="sd">        The path to the input `NumPy` file (`.npy`).</span>
+<span class="sd">    `step` : `int`</span>
+<span class="sd">        Step size for subsampling the data.</span>
+<span class="sd">    `exclude_cols` : `List[int]`</span>
+<span class="sd">        A list of column indices to exclude from the data.</span>
+<span class="sd">    `variance_threshold` : `float`</span>
+<span class="sd">        Threshold for variance-based feature selection.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `torch.Tensor`</span>
+<span class="sd">        Processed data tensor.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">load</span><span class="p">(</span><span class="n">input_file</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[::</span><span class="n">step</span><span class="p">,</span> <span class="p">:]</span>
+    <span class="k">if</span> <span class="n">exclude_cols</span><span class="p">:</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">delete</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">exclude_cols</span><span class="p">,</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">data</span> <span class="o">=</span> <span class="kp">prepare_data</span><span class="p">(</span><span class="n">variance_threshold</span><span class="p">,</span> <span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">data</span></div>
+
+
+
+<div class="viewcode-block" id="load_torch_dataset">
+<a class="viewcode-back" href="../../../../../NeuralTSNE.Utils.Loaders.FileLoaders.html#NeuralTSNE.Utils.Loaders.FileLoaders.file_loaders.load_torch_dataset">[docs]</a>
+<span class="k">def</span> <span class="nf">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">step</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span> <span class="n">output</span><span class="p">:</span> <span class="bp">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="p">[</span><span class="nc">Dataset</span><span class="p">,</span> <span class="nc">Dataset</span><span class="p">]:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Load and preprocess a `torch.Dataset`, returning `training` and `testing` subsets.</span>
+
+<span class="sd">    The function loads a `torch.Dataset` specified by the `name` parameter, extracts `training` and `testing` subsets,</span>
+<span class="sd">    and preprocesses the `training` subset by saving labels and calculating means and variances.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    `name` : `str`</span>
+<span class="sd">        The name of the torch dataset to be loaded.</span>
+<span class="sd">    `step` : `int`</span>
+<span class="sd">        The step size for subsampling the training dataset.</span>
+<span class="sd">    `output` : `str`</span>
+<span class="sd">        The output file path for saving labels.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    `Tuple[Dataset, Dataset]`</span>
+<span class="sd">        A tuple containing the training and testing subsets.</span>
+
+<span class="sd">    Note</span>
+<span class="sd">    ----</span>
+<span class="sd">    - The function uses the `name` parameter to load a torch dataset and extract training and testing subsets.</span>
+<span class="sd">    - The training subset is subsampled using the `step` parameter.</span>
+<span class="sd">    - Labels for the testing subset are saved to a file specified by the `output` parameter.</span>
+<span class="sd">    - Means and variances for the training subset are calculated and saved to the `&quot;means_and_vars.txt&quot;` file.</span>
+<span class="sd">    - The function returns a `tuple` containing the training and testing subsets.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="n">get_datasets</span><span class="o">.</span><span class="kp">get_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+    <span class="n">train</span> <span class="o">=</span> <span class="nc">Subset</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">train</span><span class="p">),</span> <span class="n">step</span><span class="p">))</span>
+
+    <span class="kp">save_torch_labels</span><span class="p">(</span><span class="n">output</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+    <span class="n">train_data</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="kp">stack</span><span class="p">([</span><span class="n">row</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">train</span><span class="p">])</span>
+    <span class="kp">save_means_and_vars</span><span class="p">(</span><span class="n">train_data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">train</span><span class="p">,</span> <span class="n">test</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Patryk Tajs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v0.0.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="file_loaders.html">v0.0.1</a></dd>
+            <dd><a href="../../../../../../v0.1.0.dev38/index.html">v0.1.0.dev38</a></dd>
+            <dd><a href="../../../../../../v0.1.0.dev39/index.html">v0.1.0.dev39</a></dd>
+            <dd><a href="../../../../../../v0.1.0.dev40/index.html">v0.1.0.dev40</a></dd>
+            <dd><a href="../../../../../../v0.1.0.dev41/index.html">v0.1.0.dev41</a></dd>
+            <dd><a href="../../../../../../v0.1.0.dev42/index.html">v0.1.0.dev42</a></dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

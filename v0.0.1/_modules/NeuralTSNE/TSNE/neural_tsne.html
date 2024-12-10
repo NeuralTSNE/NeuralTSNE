@@ -1,0 +1,394 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../../">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>NeuralTSNE.TSNE.neural_tsne &mdash; NeuralTSNE 1.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/github_style.css?v=1093691d" />
+
+  
+      <script src="../../../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../../../_static/documentation_options.js?v=8d563738"></script>
+      <script src="../../../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../../index.html" class="icon icon-home">
+            NeuralTSNE
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../modules.html">NeuralTSNE</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">NeuralTSNE</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../../index.html">Module code</a></li>
+      <li class="breadcrumb-item active">NeuralTSNE.TSNE.neural_tsne</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for NeuralTSNE.TSNE.neural_tsne</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">io</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Tuple</span>
+<span class="kn">import</span> <span class="nn">argparse</span>
+<span class="kn">from</span> <span class="nn">argparse_range</span> <span class="kn">import</span> <span class="n">range_action</span>
+
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">torch</span>
+
+<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">L</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="nc">EarlyStopping</span>
+<span class="kn">from</span> <span class="nn">pytorch_lightning.tuner</span> <span class="kn">import</span> <span class="nc">Tuner</span>
+
+<span class="kn">from</span> <span class="nn">NeuralTSNE.DatasetLoader</span> <span class="kn">import</span> <span class="n">get_datasets</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Validators.FileTypeValidators</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="nc">FileTypeWithExtensionCheck</span><span class="p">,</span>
+    <span class="nc">FileTypeWithExtensionCheckWithPredefinedDatasets</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.StatWriters</span> <span class="kn">import</span> <span class="n">save_results</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.LabelWriters</span> <span class="kn">import</span> <span class="n">save_labels_data</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Loaders.LabelLoaders</span> <span class="kn">import</span> <span class="n">load_labels</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Loaders.FileLoaders</span> <span class="kn">import</span> <span class="p">(</span>
+    <span class="n">load_npy_file</span><span class="p">,</span>
+    <span class="n">load_text_file</span><span class="p">,</span>
+    <span class="n">load_torch_dataset</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE.ParametricTSNE</span> <span class="kn">import</span> <span class="nc">ParametricTSNE</span>
+<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE.Modules</span> <span class="kn">import</span> <span class="nc">DimensionalityReduction</span>
+
+
+<div class="viewcode-block" id="run_tsne">
+<a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.run_tsne">[docs]</a>
+<span class="k">def</span> <span class="nf">run_tsne</span><span class="p">(</span>
+    <span class="n">input_file</span><span class="p">,</span>
+    <span class="nb">iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">no_dims</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+    <span class="n">perplexity</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="n">exclude_cols</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">step</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">exaggeration_iter</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="n">exaggeration_value</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="n">o</span><span class="o">=</span><span class="s2">&quot;result.txt&quot;</span><span class="p">,</span>
+    <span class="n">model_save</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">model_load</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">shuffle</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">train_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">test_size</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">jobs</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
+    <span class="n">header</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">net_multipliers</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">variance_threshold</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">cpu</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">early_stopping_delta</span><span class="o">=</span><span class="mf">1e-5</span><span class="p">,</span>
+    <span class="n">early_stopping_patience</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+    <span class="n">lr</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">,</span>
+    <span class="n">auto_lr</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+<span class="p">):</span>
+    <span class="n">available_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="s2">&quot;NeuralTSNE.DatasetLoader.get_datasets&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">available_datasets</span> <span class="o">=</span> <span class="n">get_datasets</span><span class="o">.</span><span class="kp">_get_available_datasets</span><span class="p">()</span>
+
+    <span class="k">if</span> <span class="n">net_multipliers</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">net_multipliers</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">]</span>
+
+    <span class="n">skip_data_splitting</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="p">(</span>
+        <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">io</span><span class="o">.</span><span class="nc">TextIOWrapper</span><span class="p">)</span>
+        <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">available_datasets</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>
+        <span class="ow">and</span> <span class="p">(</span><span class="n">name</span> <span class="o">:=</span> <span class="n">input_file</span><span class="o">.</span><span class="kp">lower</span><span class="p">())</span> <span class="ow">in</span> <span class="n">available_datasets</span>
+    <span class="p">):</span>
+        <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="kp">load_torch_dataset</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">o</span><span class="p">)</span>
+        <span class="n">skip_data_splitting</span> <span class="o">=</span> <span class="kc">True</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="kp">prod</span><span class="p">(</span><span class="n">train</span><span class="o">.</span><span class="n">dataset</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">:])</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">labels</span> <span class="o">=</span> <span class="kp">load_labels</span><span class="p">(</span><span class="n">labels</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">input_file</span><span class="o">.</span><span class="kp">endswith</span><span class="p">(</span><span class="s2">&quot;.npy&quot;</span><span class="p">):</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="kp">load_npy_file</span><span class="p">(</span><span class="n">input_file</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">exclude_cols</span><span class="p">,</span> <span class="n">variance_threshold</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">data</span> <span class="o">=</span> <span class="kp">load_text_file</span><span class="p">(</span>
+                <span class="n">input_file</span><span class="p">,</span> <span class="n">step</span><span class="p">,</span> <span class="n">header</span><span class="p">,</span> <span class="n">exclude_cols</span><span class="p">,</span> <span class="n">variance_threshold</span>
+            <span class="p">)</span>
+        <span class="n">features</span> <span class="o">=</span> <span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tsne</span> <span class="o">=</span> <span class="nc">ParametricTSNE</span><span class="p">(</span>
+        <span class="n">loss_fn</span><span class="o">=</span><span class="s2">&quot;kl_divergence&quot;</span><span class="p">,</span>
+        <span class="n">n_components</span><span class="o">=</span><span class="n">no_dims</span><span class="p">,</span>
+        <span class="n">perplexity</span><span class="o">=</span><span class="n">perplexity</span><span class="p">,</span>
+        <span class="n">batch_size</span><span class="o">=</span><span class="n">batch_size</span><span class="p">,</span>
+        <span class="n">early_exaggeration_epochs</span><span class="o">=</span><span class="n">exaggeration_iter</span><span class="p">,</span>
+        <span class="n">early_exaggeration_value</span><span class="o">=</span><span class="n">exaggeration_value</span><span class="p">,</span>
+        <span class="n">max_iterations</span><span class="o">=</span><span class="nb">iter</span><span class="p">,</span>
+        <span class="n">features</span><span class="o">=</span><span class="n">features</span><span class="p">,</span>
+        <span class="n">multipliers</span><span class="o">=</span><span class="n">net_multipliers</span><span class="p">,</span>
+        <span class="n">n_jobs</span><span class="o">=</span><span class="n">jobs</span><span class="p">,</span>
+        <span class="n">force_cpu</span><span class="o">=</span><span class="n">cpu</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">early_stopping</span> <span class="o">=</span> <span class="nc">EarlyStopping</span><span class="p">(</span>
+        <span class="s2">&quot;train_loss_epoch&quot;</span><span class="p">,</span>
+        <span class="n">min_delta</span><span class="o">=</span><span class="n">early_stopping_delta</span><span class="p">,</span>
+        <span class="n">patience</span><span class="o">=</span><span class="n">early_stopping_patience</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">is_gpu</span> <span class="o">=</span> <span class="n">tsne</span><span class="o">.</span><span class="n">device</span> <span class="o">==</span> <span class="n">torch</span><span class="o">.</span><span class="kp">device</span><span class="p">(</span><span class="s2">&quot;cuda:0&quot;</span><span class="p">)</span>
+
+    <span class="n">trainer</span> <span class="o">=</span> <span class="nc">L</span><span class="o">.</span><span class="nc">Trainer</span><span class="p">(</span>
+        <span class="n">accelerator</span><span class="o">=</span><span class="s2">&quot;gpu&quot;</span> <span class="k">if</span> <span class="n">is_gpu</span> <span class="k">else</span> <span class="s2">&quot;cpu&quot;</span><span class="p">,</span>
+        <span class="n">devices</span><span class="o">=</span><span class="mi">1</span> <span class="k">if</span> <span class="n">is_gpu</span> <span class="k">else</span> <span class="n">tsne</span><span class="o">.</span><span class="n">n_jobs</span><span class="p">,</span>
+        <span class="n">log_every_n_steps</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+        <span class="n">max_epochs</span><span class="o">=</span><span class="n">tsne</span><span class="o">.</span><span class="n">max_iterations</span><span class="p">,</span>
+        <span class="n">callbacks</span><span class="o">=</span><span class="p">[</span><span class="n">early_stopping</span><span class="p">],</span>
+    <span class="p">)</span>
+
+    <span class="n">classifier</span> <span class="o">=</span> <span class="nc">DimensionalityReduction</span><span class="p">(</span><span class="n">tsne</span><span class="p">,</span> <span class="n">shuffle</span><span class="p">,</span> <span class="n">lr</span><span class="o">=</span><span class="n">lr</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">model_load</span><span class="p">:</span>
+        <span class="n">tsne</span><span class="o">.</span><span class="kp">read_model</span><span class="p">(</span><span class="n">model_load</span><span class="p">)</span>
+        <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">tsne</span><span class="o">.</span><span class="kp">split_dataset</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_data_splitting</span>
+            <span class="k">else</span> <span class="n">tsne</span><span class="o">.</span><span class="kp">create_dataloaders</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_data_splitting</span><span class="p">:</span>
+            <span class="kp">save_labels_data</span><span class="p">({</span><span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="n">o</span><span class="p">},</span> <span class="n">test</span><span class="p">)</span>
+        <span class="nc">Y</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="kp">predict</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">train</span><span class="p">,</span> <span class="n">test</span> <span class="o">=</span> <span class="p">(</span>
+            <span class="n">tsne</span><span class="o">.</span><span class="kp">split_dataset</span><span class="p">(</span>
+                <span class="n">data</span><span class="p">,</span> <span class="n">y</span><span class="o">=</span><span class="n">labels</span><span class="p">,</span> <span class="n">train_size</span><span class="o">=</span><span class="n">train_size</span><span class="p">,</span> <span class="n">test_size</span><span class="o">=</span><span class="n">test_size</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_data_splitting</span>
+            <span class="k">else</span> <span class="n">tsne</span><span class="o">.</span><span class="kp">create_dataloaders</span><span class="p">(</span><span class="n">train</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">if</span> <span class="n">auto_lr</span><span class="p">:</span>
+            <span class="n">tuner</span> <span class="o">=</span> <span class="nc">Tuner</span><span class="p">(</span><span class="n">trainer</span><span class="p">)</span>
+            <span class="n">tuner</span><span class="o">.</span><span class="kp">lr_find</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">train</span><span class="p">)</span>
+            <span class="n">classifier</span><span class="o">.</span><span class="kp">reset_exaggeration_status</span><span class="p">()</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">skip_data_splitting</span><span class="p">:</span>
+            <span class="kp">save_labels_data</span><span class="p">({</span><span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="n">o</span><span class="p">},</span> <span class="n">test</span><span class="p">)</span>
+        <span class="n">trainer</span><span class="o">.</span><span class="kp">fit</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">train</span><span class="p">,</span> <span class="p">[</span><span class="n">test</span><span class="p">])</span>
+        <span class="k">if</span> <span class="n">model_save</span><span class="p">:</span>
+            <span class="n">tsne</span><span class="o">.</span><span class="kp">save_model</span><span class="p">(</span><span class="n">model_save</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">test</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="nc">Y</span> <span class="o">=</span> <span class="n">trainer</span><span class="o">.</span><span class="kp">predict</span><span class="p">(</span><span class="n">classifier</span><span class="p">,</span> <span class="n">test</span><span class="p">)</span>
+
+    <span class="kp">save_results</span><span class="p">({</span><span class="s2">&quot;o&quot;</span><span class="p">:</span> <span class="n">o</span><span class="p">,</span> <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="n">step</span><span class="p">},</span> <span class="n">test</span><span class="p">,</span> <span class="nc">Y</span><span class="p">)</span></div>
+
+
+
+<div class="viewcode-block" id="parse_args">
+<a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.parse_args">[docs]</a>
+<span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+    <span class="n">available_datasets</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">if</span> <span class="s2">&quot;NeuralTSNE.DatasetLoader.get_datasets&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
+        <span class="n">available_datasets</span> <span class="o">=</span> <span class="n">get_datasets</span><span class="o">.</span><span class="kp">_get_available_datasets</span><span class="p">()</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="nc">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="s2">&quot;t-SNE Algorithm&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;input_file&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="nc">FileTypeWithExtensionCheckWithPredefinedDatasets</span><span class="p">(</span>
+            <span class="n">valid_extensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;txt&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">,</span> <span class="s2">&quot;npy&quot;</span><span class="p">),</span>
+            <span class="n">available_datasets</span><span class="o">=</span><span class="n">available_datasets</span><span class="p">,</span>
+        <span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Input file&quot;</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-iter&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of iterations&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-labels&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="nc">FileTypeWithExtensionCheck</span><span class="p">(</span><span class="n">valid_extensions</span><span class="o">=</span><span class="p">(</span><span class="s2">&quot;txt&quot;</span><span class="p">,</span> <span class="s2">&quot;data&quot;</span><span class="p">)),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Labels file&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-no_dims&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Number of dimensions&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">2</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-perplexity&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Perplexity of the Gaussian kernel&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mf">30.0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-exclude_cols&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Columns to exclude&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-step&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Step between samples&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-exaggeration_iter&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Early exaggeration end&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-exaggeration_value&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Early exaggeration value&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="mi">12</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-o&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">str</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Output filename&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="s2">&quot;result.txt&quot;</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-model_save&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Filename to save model to&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-model_load&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">str</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Filename to load model from&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-shuffle&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Shuffle data&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-train_size&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="kp">range_action</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Train size&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-test_size&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span>
+        <span class="n">action</span><span class="o">=</span><span class="kp">range_action</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">),</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Test size&quot;</span><span class="p">,</span>
+        <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="c1"># parser.add_argument(</span>
+    <span class="c1">#     &quot;-jobs&quot;, type=int, help=&quot;Number of jobs&quot;, required=False, default=1</span>
+    <span class="c1"># )</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-batch_size&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Batch size&quot;</span><span class="p">,</span> <span class="n">required</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">1000</span>
+    <span class="p">)</span>
+
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-header&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Data has header&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-net_multipliers&quot;</span><span class="p">,</span>
+        <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span>
+        <span class="n">nargs</span><span class="o">=</span><span class="s2">&quot;+&quot;</span><span class="p">,</span>
+        <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Network multipliers&quot;</span><span class="p">,</span>
+        <span class="n">default</span><span class="o">=</span><span class="p">[</span><span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">,</span> <span class="mf">0.75</span><span class="p">],</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-variance_threshold&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Variance threshold&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-cpu&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Use CPU&quot;</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-early_stopping_delta&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Early stopping delta&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1e-5</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span>
+        <span class="s2">&quot;-early_stopping_patience&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">int</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Early stopping patience&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mi">3</span>
+    <span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-lr&quot;</span><span class="p">,</span> <span class="bp">type</span><span class="o">=</span><span class="bp">float</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Learning rate&quot;</span><span class="p">,</span> <span class="n">default</span><span class="o">=</span><span class="mf">1e-3</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="kp">add_argument</span><span class="p">(</span><span class="s2">&quot;-auto_lr&quot;</span><span class="p">,</span> <span class="n">action</span><span class="o">=</span><span class="s2">&quot;store_true&quot;</span><span class="p">,</span> <span class="n">help</span><span class="o">=</span><span class="s2">&quot;Auto learning rate&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">parser</span><span class="o">.</span><span class="kp">parse_args</span><span class="p">()</span></div>
+
+
+
+<div class="viewcode-block" id="main">
+<a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.main">[docs]</a>
+<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="kp">parse_args</span><span class="p">()</span>
+    <span class="kp">run_tsne</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span></div>
+
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Patryk Tajs.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+<div class="rst-versions" data-toggle="rst-versions" role="note" aria-label="versions">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+        <span class="fa fa-book"> Other Versions</span>
+        v: v0.0.1
+        <span class="fa fa-caret-down"></span>
+    </span>
+    <div class="rst-other-versions">
+        <dl>
+            <dt>Branches</dt>
+            <dd><a href="neural_tsne.html">v0.0.1</a></dd>
+            <dd><a href="../../../../v0.1.0.dev38/index.html">v0.1.0.dev38</a></dd>
+            <dd><a href="../../../../v0.1.0.dev39/index.html">v0.1.0.dev39</a></dd>
+            <dd><a href="../../../../v0.1.0.dev40/index.html">v0.1.0.dev40</a></dd>
+            <dd><a href="../../../../v0.1.0.dev41/index.html">v0.1.0.dev41</a></dd>
+            <dd><a href="../../../../v0.1.0.dev42/index.html">v0.1.0.dev42</a></dd>
+        </dl>
+    </div>
+</div><script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
