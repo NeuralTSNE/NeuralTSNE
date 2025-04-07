@@ -290,6 +290,8 @@ class ParametricTSNE:
             unit="batch",
             total=len(dataloader),
             desc="Calculating P",
+            leave=True,
+            position=0
         ):
             batch = x2p(X, self.perplexity, self.tolerance)
             batch[torch.isnan(batch)] = 0
