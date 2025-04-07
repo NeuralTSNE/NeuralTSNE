@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.TSNE.Modules.dimensionality_reduction &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/github_style.css?v=1093691d" />
 
@@ -70,19 +70,19 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.TSNE.Modules.dimensionality_reduction</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Any</span><span class="p">,</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">,</span> <span class="nc">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="nc">Any</span><span class="p">,</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">,</span> <span class="nc">Union</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torch.optim</span> <span class="k">as</span> <span class="nn">optim</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch.optim</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">optim</span>
 
-<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">L</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytorch_lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
 
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE</span> <span class="kn">import</span> <span class="nc">ParametricTSNE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE</span><span class="w"> </span><span class="kn">import</span> <span class="nc">ParametricTSNE</span>
 
 
 <div class="viewcode-block" id="DimensionalityReduction">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction">[docs]</a>
-<span class="k">class</span> <span class="nc">DimensionalityReduction</span><span class="p">(</span><span class="nc">L</span><span class="o">.</span><span class="nc">LightningModule</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">DimensionalityReduction</span><span class="p">(</span><span class="nc">L</span><span class="o">.</span><span class="nc">LightningModule</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Lightning Module for training a neural network-based</span>
 <span class="sd">    Parametric t-SNE dimensionality reduction model.</span>
@@ -106,7 +106,7 @@
 <span class="sd">    handling the training process.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">tsne</span><span class="p">:</span> <span class="s2">&quot;ParametricTSNE&quot;</span><span class="p">,</span>
         <span class="n">shuffle</span><span class="p">:</span> <span class="bp">bool</span><span class="p">,</span>
@@ -127,7 +127,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.reset_exaggeration_status">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.reset_exaggeration_status">[docs]</a>
-    <span class="k">def</span> <span class="nf">reset_exaggeration_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">reset_exaggeration_status</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Reset exaggeration status based on the number of exaggeration epochs.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -136,7 +136,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.training_step">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.training_step">[docs]</a>
-    <span class="k">def</span> <span class="nf">training_step</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">training_step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">batch</span><span class="p">:</span> <span class="nc">Union</span><span class="p">[</span>
             <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nc">List</span><span class="p">[</span><span class="nc">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Any</span><span class="p">]]</span>
@@ -188,7 +188,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.validation_step">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.validation_step">[docs]</a>
-    <span class="k">def</span> <span class="nf">validation_step</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">validation_step</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">batch</span><span class="p">:</span> <span class="nc">Union</span><span class="p">[</span>
             <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="o">...</span><span class="p">],</span> <span class="nc">List</span><span class="p">[</span><span class="nc">Union</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="nc">Any</span><span class="p">]]</span>
@@ -239,7 +239,7 @@
         <span class="k">return</span> <span class="p">{</span><span class="s2">&quot;loss&quot;</span><span class="p">:</span> <span class="n">loss</span><span class="p">}</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_set_optimizer</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_set_optimizer</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">optimizer</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">optimizer_params</span><span class="p">:</span> <span class="bp">dict</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="nc">Optimizer</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -272,7 +272,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.configure_optimizers">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.configure_optimizers">[docs]</a>
-    <span class="k">def</span> <span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="nc">Optimizer</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">configure_optimizers</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">optim</span><span class="o">.</span><span class="nc">Optimizer</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Configure the optimizer for training.</span>
 
@@ -290,7 +290,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.on_train_start">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">on_train_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_train_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform actions at the beginning of the training process.</span>
 
@@ -305,7 +305,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.on_train_epoch_start">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_epoch_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">on_train_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_train_epoch_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform actions at the start of each training epoch.</span>
 
@@ -331,7 +331,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.on_train_epoch_end">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_train_epoch_end">[docs]</a>
-    <span class="k">def</span> <span class="nf">on_train_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_train_epoch_end</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform actions at the end of each training epoch.</span>
 
@@ -346,7 +346,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.on_validation_start">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.on_validation_start">[docs]</a>
-    <span class="k">def</span> <span class="nf">on_validation_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">on_validation_start</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform actions at the beginning of the validation process.</span>
 
@@ -364,7 +364,7 @@
 
 <div class="viewcode-block" id="DimensionalityReduction.predict_step">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Modules.html#NeuralTSNE.TSNE.Modules.dimensionality_reduction.DimensionalityReduction.predict_step">[docs]</a>
-    <span class="k">def</span> <span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">predict_step</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">batch</span><span class="p">,</span> <span class="n">batch_idx</span><span class="p">,</span> <span class="n">dataloader_idx</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Perform a single step during the prediction process.</span>
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.TSNE.Helpers.helpers &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/github_style.css?v=1093691d" />
 
@@ -70,13 +70,13 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.TSNE.Helpers.helpers</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Tuple</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="nc">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 
 <div class="viewcode-block" id="Hbeta">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Helpers.html#NeuralTSNE.TSNE.Helpers.helpers.Hbeta">[docs]</a>
-<span class="k">def</span> <span class="nf">Hbeta</span><span class="p">(</span><span class="nc">D</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="bp">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">]:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">Hbeta</span><span class="p">(</span><span class="nc">D</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="n">beta</span><span class="p">:</span> <span class="bp">float</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="p">[</span><span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">]:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Calculates entropy and probability distribution based on a distance matrix.</span>
 
@@ -107,7 +107,7 @@
 
 <div class="viewcode-block" id="x2p_job">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Helpers.html#NeuralTSNE.TSNE.Helpers.helpers.x2p_job">[docs]</a>
-<span class="k">def</span> <span class="nf">x2p_job</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">x2p_job</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="nc">Tuple</span><span class="p">[</span><span class="bp">int</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">],</span>
     <span class="n">tolerance</span><span class="p">:</span> <span class="bp">float</span><span class="p">,</span>
     <span class="n">max_iterations</span><span class="p">:</span> <span class="bp">int</span> <span class="o">=</span> <span class="mi">50</span><span class="p">,</span>
@@ -166,7 +166,7 @@
 
 <div class="viewcode-block" id="x2p">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.Helpers.html#NeuralTSNE.TSNE.Helpers.helpers.x2p">[docs]</a>
-<span class="k">def</span> <span class="nf">x2p</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">x2p</span><span class="p">(</span>
     <span class="nc">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span>
     <span class="n">perplexity</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
     <span class="n">tolerance</span><span class="p">:</span> <span class="bp">float</span><span class="p">,</span>

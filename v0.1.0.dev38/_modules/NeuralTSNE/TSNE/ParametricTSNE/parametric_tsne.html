@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/github_style.css?v=1093691d" />
 
@@ -70,26 +70,26 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="nc">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Callable</span><span class="p">,</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">,</span> <span class="nc">Union</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="nc">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="nc">Callable</span><span class="p">,</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Tuple</span><span class="p">,</span> <span class="nc">Union</span>
 
-<span class="kn">import</span> <span class="nn">torch</span>
-<span class="kn">import</span> <span class="nn">torchinfo</span>
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
-<span class="kn">from</span> <span class="nn">torch.utils.data</span> <span class="kn">import</span> <span class="nc">DataLoader</span><span class="p">,</span> <span class="nc">Dataset</span><span class="p">,</span> <span class="nc">TensorDataset</span><span class="p">,</span> <span class="n">random_split</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torchinfo</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch.utils.data</span><span class="w"> </span><span class="kn">import</span> <span class="nc">DataLoader</span><span class="p">,</span> <span class="nc">Dataset</span><span class="p">,</span> <span class="nc">TensorDataset</span><span class="p">,</span> <span class="n">random_split</span>
 
-<span class="kn">from</span> <span class="nn">tqdm</span> <span class="kn">import</span> <span class="n">tqdm</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">tqdm</span><span class="w"> </span><span class="kn">import</span> <span class="n">tqdm</span>
 
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE</span> <span class="kn">import</span> <span class="n">x2p</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE</span> <span class="kn">import</span> <span class="nc">CostFunctions</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE</span> <span class="kn">import</span> <span class="nc">NeuralNetwork</span><span class="p">,</span> <span class="nc">BaseModel</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE</span><span class="w"> </span><span class="kn">import</span> <span class="n">x2p</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE</span><span class="w"> </span><span class="kn">import</span> <span class="nc">CostFunctions</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE</span><span class="w"> </span><span class="kn">import</span> <span class="nc">NeuralNetwork</span><span class="p">,</span> <span class="nc">BaseModel</span>
 
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils</span> <span class="kn">import</span> <span class="n">does_sum_up_to</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils</span><span class="w"> </span><span class="kn">import</span> <span class="n">does_sum_up_to</span>
 
 
 <div class="viewcode-block" id="ParametricTSNE">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE">[docs]</a>
-<span class="k">class</span> <span class="nc">ParametricTSNE</span><span class="p">:</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">ParametricTSNE</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Parametric t-SNE implementation using a neural network model.</span>
 
@@ -123,7 +123,7 @@
 <span class="sd">        Predefined model. Defaults to `None`.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">loss_fn</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span>
         <span class="n">perplexity</span><span class="p">:</span> <span class="bp">int</span><span class="p">,</span>
@@ -185,7 +185,7 @@
 
 <div class="viewcode-block" id="ParametricTSNE.set_loss_fn">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.set_loss_fn">[docs]</a>
-    <span class="k">def</span> <span class="nf">set_loss_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_fn</span><span class="p">:</span> <span class="bp">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Callable</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">set_loss_fn</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">loss_fn</span><span class="p">:</span> <span class="bp">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Callable</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Set the loss function based on the provided string.</span>
 
@@ -210,7 +210,7 @@
 
 <div class="viewcode-block" id="ParametricTSNE.save_model">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.save_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="bp">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">save_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="bp">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Save the model&#39;s state dictionary to a file.</span>
 
@@ -224,7 +224,7 @@
 
 <div class="viewcode-block" id="ParametricTSNE.read_model">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.read_model">[docs]</a>
-    <span class="k">def</span> <span class="nf">read_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="bp">str</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">read_model</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">filename</span><span class="p">:</span> <span class="bp">str</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Load the model&#39;s state dictionary from a file.</span>
 
@@ -238,7 +238,7 @@
 
 <div class="viewcode-block" id="ParametricTSNE.split_dataset">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.split_dataset">[docs]</a>
-    <span class="k">def</span> <span class="nf">split_dataset</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">split_dataset</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="nc">X</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">,</span>
         <span class="n">y</span><span class="p">:</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -284,7 +284,7 @@
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="kp">create_dataloaders</span><span class="p">(</span><span class="n">train_dataset</span><span class="p">,</span> <span class="n">test_dataset</span><span class="p">)</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_determine_train_test_split</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_determine_train_test_split</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">train_size</span><span class="p">:</span> <span class="bp">float</span><span class="p">,</span> <span class="n">test_size</span><span class="p">:</span> <span class="bp">float</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="p">[</span><span class="bp">float</span><span class="p">,</span> <span class="bp">float</span><span class="p">]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -315,7 +315,7 @@
 
 <div class="viewcode-block" id="ParametricTSNE.create_dataloaders">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.ParametricTSNE.html#NeuralTSNE.TSNE.ParametricTSNE.parametric_tsne.ParametricTSNE.create_dataloaders">[docs]</a>
-    <span class="k">def</span> <span class="nf">create_dataloaders</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">create_dataloaders</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">train</span><span class="p">:</span> <span class="nc">Dataset</span><span class="p">,</span> <span class="n">test</span><span class="p">:</span> <span class="nc">Dataset</span>
     <span class="p">)</span> <span class="o">-&gt;</span> <span class="nc">Tuple</span><span class="p">[</span><span class="nc">Union</span><span class="p">[</span><span class="nc">DataLoader</span><span class="p">,</span> <span class="kc">None</span><span class="p">],</span> <span class="nc">Union</span><span class="p">[</span><span class="nc">DataLoader</span><span class="p">,</span> <span class="kc">None</span><span class="p">]]:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
@@ -358,7 +358,7 @@
         <span class="k">return</span> <span class="n">train_loader</span><span class="p">,</span> <span class="n">test_loader</span></div>
 
 
-    <span class="k">def</span> <span class="nf">_calculate_P</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">:</span> <span class="nc">DataLoader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">_calculate_P</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">dataloader</span><span class="p">:</span> <span class="nc">DataLoader</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="nc">Tensor</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Calculate joint probability matrix P.</span>
 

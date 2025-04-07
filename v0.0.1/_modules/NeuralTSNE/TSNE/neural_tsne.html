@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.TSNE.neural_tsne &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/github_style.css?v=1093691d" />
 
@@ -70,41 +70,41 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.TSNE.neural_tsne</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">io</span>
-<span class="kn">import</span> <span class="nn">sys</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">Tuple</span>
-<span class="kn">import</span> <span class="nn">argparse</span>
-<span class="kn">from</span> <span class="nn">argparse_range</span> <span class="kn">import</span> <span class="n">range_action</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">io</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">os</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="nc">Tuple</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">argparse_range</span><span class="w"> </span><span class="kn">import</span> <span class="n">range_action</span>
 
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">torch</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
-<span class="kn">import</span> <span class="nn">pytorch_lightning</span> <span class="k">as</span> <span class="nn">L</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.callbacks</span> <span class="kn">import</span> <span class="nc">EarlyStopping</span>
-<span class="kn">from</span> <span class="nn">pytorch_lightning.tuner</span> <span class="kn">import</span> <span class="nc">Tuner</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">pytorch_lightning</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">L</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pytorch_lightning.callbacks</span><span class="w"> </span><span class="kn">import</span> <span class="nc">EarlyStopping</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">pytorch_lightning.tuner</span><span class="w"> </span><span class="kn">import</span> <span class="nc">Tuner</span>
 
-<span class="kn">from</span> <span class="nn">NeuralTSNE.DatasetLoader</span> <span class="kn">import</span> <span class="n">get_datasets</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Validators.FileTypeValidators</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.DatasetLoader</span><span class="w"> </span><span class="kn">import</span> <span class="n">get_datasets</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils.Validators.FileTypeValidators</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="nc">FileTypeWithExtensionCheck</span><span class="p">,</span>
     <span class="nc">FileTypeWithExtensionCheckWithPredefinedDatasets</span><span class="p">,</span>
 <span class="p">)</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.StatWriters</span> <span class="kn">import</span> <span class="n">save_results</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Writers.LabelWriters</span> <span class="kn">import</span> <span class="n">save_labels_data</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Loaders.LabelLoaders</span> <span class="kn">import</span> <span class="n">load_labels</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.Utils.Loaders.FileLoaders</span> <span class="kn">import</span> <span class="p">(</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils.Writers.StatWriters</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_results</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils.Writers.LabelWriters</span><span class="w"> </span><span class="kn">import</span> <span class="n">save_labels_data</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils.Loaders.LabelLoaders</span><span class="w"> </span><span class="kn">import</span> <span class="n">load_labels</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.Utils.Loaders.FileLoaders</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
     <span class="n">load_npy_file</span><span class="p">,</span>
     <span class="n">load_text_file</span><span class="p">,</span>
     <span class="n">load_torch_dataset</span><span class="p">,</span>
 <span class="p">)</span>
 
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE.ParametricTSNE</span> <span class="kn">import</span> <span class="nc">ParametricTSNE</span>
-<span class="kn">from</span> <span class="nn">NeuralTSNE.TSNE.Modules</span> <span class="kn">import</span> <span class="nc">DimensionalityReduction</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE.ParametricTSNE</span><span class="w"> </span><span class="kn">import</span> <span class="nc">ParametricTSNE</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">NeuralTSNE.TSNE.Modules</span><span class="w"> </span><span class="kn">import</span> <span class="nc">DimensionalityReduction</span>
 
 
 <div class="viewcode-block" id="run_tsne">
 <a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.run_tsne">[docs]</a>
-<span class="k">def</span> <span class="nf">run_tsne</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">run_tsne</span><span class="p">(</span>
     <span class="n">input_file</span><span class="p">,</span>
     <span class="nb">iter</span><span class="o">=</span><span class="mi">1000</span><span class="p">,</span>
     <span class="n">labels</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
@@ -226,7 +226,7 @@
 
 <div class="viewcode-block" id="parse_args">
 <a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.parse_args">[docs]</a>
-<span class="k">def</span> <span class="nf">parse_args</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">parse_args</span><span class="p">():</span>
     <span class="n">available_datasets</span> <span class="o">=</span> <span class="p">[]</span>
     <span class="k">if</span> <span class="s2">&quot;NeuralTSNE.DatasetLoader.get_datasets&quot;</span> <span class="ow">in</span> <span class="n">sys</span><span class="o">.</span><span class="n">modules</span><span class="p">:</span>
         <span class="n">available_datasets</span> <span class="o">=</span> <span class="n">get_datasets</span><span class="o">.</span><span class="kp">_get_available_datasets</span><span class="p">()</span>
@@ -340,7 +340,7 @@
 
 <div class="viewcode-block" id="main">
 <a class="viewcode-back" href="../../../NeuralTSNE.TSNE.html#NeuralTSNE.TSNE.neural_tsne.main">[docs]</a>
-<span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">main</span><span class="p">():</span>
     <span class="n">args</span> <span class="o">=</span> <span class="kp">parse_args</span><span class="p">()</span>
     <span class="kp">run_tsne</span><span class="p">(</span><span class="o">**</span><span class="nb">vars</span><span class="p">(</span><span class="n">args</span><span class="p">))</span></div>
 

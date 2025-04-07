@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.TSNE.NeuralNetwork.neural_network &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../_static/github_style.css?v=1093691d" />
 
@@ -70,30 +70,30 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.TSNE.NeuralNetwork.neural_network</h1><div class="highlight"><pre>
-<span></span><span class="kn">from</span> <span class="nn">typing</span> <span class="kn">import</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Optional</span>
-<span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="nc">OrderedDict</span>
-<span class="kn">from</span> <span class="nn">abc</span> <span class="kn">import</span> <span class="nc">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
+<span></span><span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="nc">List</span><span class="p">,</span> <span class="nc">Optional</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">collections</span><span class="w"> </span><span class="kn">import</span> <span class="nc">OrderedDict</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">abc</span><span class="w"> </span><span class="kn">import</span> <span class="nc">ABC</span><span class="p">,</span> <span class="n">abstractmethod</span>
 
-<span class="kn">from</span> <span class="nn">torch</span> <span class="kn">import</span> <span class="n">nn</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">torch</span><span class="w"> </span><span class="kn">import</span> <span class="n">nn</span>
 
 
 <div class="viewcode-block" id="BaseModel">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.NeuralNetwork.html#NeuralTSNE.TSNE.NeuralNetwork.neural_network.BaseModel">[docs]</a>
-<span class="k">class</span> <span class="nc">BaseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="nc">Module</span><span class="p">,</span> <span class="nc">ABC</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BaseModel</span><span class="p">(</span><span class="n">nn</span><span class="o">.</span><span class="nc">Module</span><span class="p">,</span> <span class="nc">ABC</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Base class for neural network models.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
     <span class="nd">@property</span>
     <span class="nd">@abstractmethod</span>
-    <span class="k">def</span> <span class="nf">in_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">int</span><span class="p">:</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;Return the number of input features.&quot;&quot;&quot;</span></div>
 
 
 
 <div class="viewcode-block" id="NeuralNetwork">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.NeuralNetwork.html#NeuralTSNE.TSNE.NeuralNetwork.neural_network.NeuralNetwork">[docs]</a>
-<span class="k">class</span> <span class="nc">NeuralNetwork</span><span class="p">(</span><span class="nc">BaseModel</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">NeuralNetwork</span><span class="p">(</span><span class="nc">BaseModel</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Neural network model for dimensionality reduction.</span>
 
@@ -117,7 +117,7 @@
 <span class="sd">    the given layers and other parameters are ignored.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span>
         <span class="n">initial_features</span><span class="p">:</span> <span class="bp">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
         <span class="n">n_components</span><span class="p">:</span> <span class="bp">int</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
@@ -154,7 +154,7 @@
 
 <div class="viewcode-block" id="NeuralNetwork.forward">
 <a class="viewcode-back" href="../../../../NeuralTSNE.TSNE.NeuralNetwork.html#NeuralTSNE.TSNE.NeuralNetwork.neural_network.NeuralNetwork.forward">[docs]</a>
-    <span class="k">def</span> <span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">forward</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">x</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Forward pass through the neural network.</span>
 
@@ -173,7 +173,7 @@
 
 
     <span class="nd">@property</span>
-    <span class="k">def</span> <span class="nf">in_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">int</span><span class="p">:</span>
+    <span class="k">def</span><span class="w"> </span><span class="nf">in_features</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="bp">int</span><span class="p">:</span>
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequential_stack</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">in_features</span></div>
 
 </pre></div>

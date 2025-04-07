@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.Utils.Validators.FileTypeValidators.filetype_validators &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../../../_static/github_style.css?v=1093691d" />
 
@@ -70,12 +70,12 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.Utils.Validators.FileTypeValidators.filetype_validators</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">argparse</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
 
 
 <div class="viewcode-block" id="FileTypeWithExtensionCheck">
 <a class="viewcode-back" href="../../../../../NeuralTSNE.Utils.Validators.FileTypeValidators.html#NeuralTSNE.Utils.Validators.FileTypeValidators.filetype_validators.FileTypeWithExtensionCheck">[docs]</a>
-<span class="k">class</span> <span class="nc">FileTypeWithExtensionCheck</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="nc">FileType</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FileTypeWithExtensionCheck</span><span class="p">(</span><span class="n">argparse</span><span class="o">.</span><span class="nc">FileType</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom `argparse.FileType` with additional extension validation.</span>
 
@@ -93,11 +93,11 @@
 <span class="sd">    This class extends `argparse.FileType` to include validation of file extensions.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">valid_extensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">valid_extensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">valid_extensions</span> <span class="o">=</span> <span class="n">valid_extensions</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validate the file extension before calling the parent `__call__` method.</span>
 
@@ -125,7 +125,7 @@
 
 <div class="viewcode-block" id="FileTypeWithExtensionCheckWithPredefinedDatasets">
 <a class="viewcode-back" href="../../../../../NeuralTSNE.Utils.Validators.FileTypeValidators.html#NeuralTSNE.Utils.Validators.FileTypeValidators.filetype_validators.FileTypeWithExtensionCheckWithPredefinedDatasets">[docs]</a>
-<span class="k">class</span> <span class="nc">FileTypeWithExtensionCheckWithPredefinedDatasets</span><span class="p">(</span><span class="nc">FileTypeWithExtensionCheck</span><span class="p">):</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">FileTypeWithExtensionCheckWithPredefinedDatasets</span><span class="p">(</span><span class="nc">FileTypeWithExtensionCheck</span><span class="p">):</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Custom `argparse.FileType` with additional extension and predefined dataset validation.</span>
 
@@ -145,13 +145,13 @@
 <span class="sd">    This class extends `FileTypeWithExtensionCheck` to include validation of predefined datasets.</span>
 <span class="sd">    &quot;&quot;&quot;</span>
 
-    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
         <span class="bp">self</span><span class="p">,</span> <span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">valid_extensions</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">available_datasets</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span>
     <span class="p">):</span>
         <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">mode</span><span class="p">,</span> <span class="n">valid_extensions</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">available_datasets</span> <span class="o">=</span> <span class="n">available_datasets</span> <span class="ow">or</span> <span class="p">[]</span>
 
-    <span class="k">def</span> <span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
+    <span class="k">def</span><span class="w"> </span><span class="fm">__call__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">string</span><span class="p">):</span>
 <span class="w">        </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Validate the file extension and predefined dataset before calling the parent `__call__` method.</span>
 

@@ -6,7 +6,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>NeuralTSNE.MnistPlotter.mnist_plot &mdash; NeuralTSNE 1.0.0 documentation</title>
-      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=81ef5681" />
+      <link rel="stylesheet" type="text/css" href="../../../_static/pygments.css?v=0745d1ac" />
       <link rel="stylesheet" type="text/css" href="../../../_static/css/theme.css?v=e59714d7" />
       <link rel="stylesheet" type="text/css" href="../../../_static/github_style.css?v=1093691d" />
 
@@ -70,14 +70,14 @@
            <div itemprop="articleBody">
              
   <h1>Source code for NeuralTSNE.MnistPlotter.mnist_plot</h1><div class="highlight"><pre>
-<span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
-<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
-<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span></span><span class="kn">import</span><span class="w"> </span><span class="nn">matplotlib.pyplot</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">plt</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">seaborn</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">sns</span>
 
 
 <div class="viewcode-block" id="plot">
 <a class="viewcode-back" href="../../../NeuralTSNE.MnistPlotter.html#NeuralTSNE.MnistPlotter.mnist_plot.plot">[docs]</a>
-<span class="k">def</span> <span class="nf">plot</span><span class="p">(</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot</span><span class="p">(</span>
     <span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">labels</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">,</span> <span class="n">is_fashion</span><span class="p">:</span> <span class="bp">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">img_file</span><span class="p">:</span> <span class="bp">str</span> <span class="o">=</span> <span class="kc">None</span>
 <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
@@ -135,7 +135,7 @@
 
 <div class="viewcode-block" id="plot_from_file">
 <a class="viewcode-back" href="../../../NeuralTSNE.MnistPlotter.html#NeuralTSNE.MnistPlotter.mnist_plot.plot_from_file">[docs]</a>
-<span class="k">def</span> <span class="nf">plot_from_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">labels_file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">is_fashion</span><span class="p">:</span> <span class="bp">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">plot_from_file</span><span class="p">(</span><span class="n">file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">labels_file</span><span class="p">:</span> <span class="bp">str</span><span class="p">,</span> <span class="n">is_fashion</span><span class="p">:</span> <span class="bp">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">    Plot t-SNE results of mnist dataset from file.</span>
 
