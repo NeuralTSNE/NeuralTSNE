@@ -1,3 +1,6 @@
+# Mac OS
+.DS_Store
+
 # Created by https://www.toptal.com/developers/gitignore/api/python
 # Edit at https://www.toptal.com/developers/gitignore?templates=python
 
@@ -213,6 +216,7 @@ coverage/status.json
 coverage/style.css
 coverage/html_report/report.html
 coverage/html_report/assets/style.css
+examples/lightning_logs/*
 lightning_logs/version_0/hparams.yaml
 lightning_logs/version_0/checkpoints/epoch=0-step=1.ckpt
 lightning_logs/version_1/hparams.yaml
