@@ -102,7 +102,7 @@ class DimensionalityReduction(L.LightningModule):
             {"device": self.tsne.device, "batch_size": self.batch_size},
         )
         self.log(
-            "train_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True
+            "train_loss", loss, on_step=False, on_epoch=True, prog_bar=True, logger=True
         )
         return {"loss": loss}
 
@@ -152,7 +152,7 @@ class DimensionalityReduction(L.LightningModule):
             {"device": self.tsne.device, "batch_size": self.batch_size},
         )
         self.log(
-            "val_loss", loss, on_step=True, on_epoch=True, prog_bar=True, logger=True
+            "val_loss", loss, on_step=False, on_epoch=True, prog_bar=True, logger=True
         )
         return {"loss": loss}
 
