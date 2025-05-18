@@ -3,7 +3,7 @@ name = "NeuralTSNE"
 description = "Implementation of neural t-SNE in PyTorch with CUDA support"
 
 authors = [{ name = "Patryk Tajs", email = "minosyx@gmail.com" }]
-license = { file = "../LICENSE" }
+license-files = ["LICENSE"]
 maintainers = [{ name = "Patryk Tajs", email = "minosyx@gmail.com" }]
 requires-python = ">=3.11"
 dependencies = [
