@@ -25,3 +25,7 @@ Example usage was provided in the [examples](examples/) directory.
 ## License
 
 This project is licensed under the MIT License - see the [LICENSE](NeuralTSNE/LICENSE.txt) file for details.
+
+## Acknowledgements
+
+The project is supported by the National Science Center in Poland (Sonata 2021/43/D/ST4/00920, ``Statistical Learning of Slow Collective Variables from Atomistic Simulations'').
